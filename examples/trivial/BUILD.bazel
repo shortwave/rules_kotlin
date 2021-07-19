@@ -12,7 +12,7 @@ define_kt_toolchain(
     name = "toolchain",
     api_version = "1.4",
     experimental_multiplex_workers = False,
-    experimental_use_abi_jars = True,
+    experimental_use_abi_jars = False,
     javac_options = ":javac_options",
     jvm_target = "1.8",
     kotlinc_options = ":kotlinc_options",
