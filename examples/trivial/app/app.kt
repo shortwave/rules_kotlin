@@ -13,12 +13,15 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
     val (n, m) = args.map { it.toDouble() }
-    val result = eval(Sum(Const(n), Const(m)))
-    println("$n + $m = $result")
+    val sum = eval(Sum(Const(n), Const(m)))
+    println("$n + $m = $sum")
+    val product = eval(Multiply(Const(n), Const(m)))
+    println("$n * $m = $product")
 }
 
 fun eval(expr: Expr): Double = when(expr) {
     is Const -> expr.number
     is Sum -> eval(expr.e1) + eval(expr.e2)
+    is Multiply -> eval(expr.e1) * eval(expr.e2)
     NotANumber -> Double.NaN
 }
