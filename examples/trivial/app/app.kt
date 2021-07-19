@@ -1,28 +1,24 @@
 package app
 
-import com.expedia.graphql.SchemaGeneratorConfig
-import com.expedia.graphql.TopLevelObject
-import com.expedia.graphql.toSchema
-import graphql.GraphQL
+import lib.Expr
+import lib.Const
+import lib.Sum
+import lib.NotANumber
 
-data class Foo(val name: String, val age: Int)
+import kotlin.system.exitProcess
 
-class Query {
-  fun foo(bar: String?) = Foo("$bar!", 42)
+fun main(args: Array<String>) {
+    if (args.size != 2) {
+        println("Expected usage ./myapp <number> <number>")
+        exitProcess(1)
+    }
+    val (n, m) = args.map { it.toDouble() }
+    val result = eval(Sum(Const(n), Const(m)))
+    println("$n + $m = $result")
 }
 
-class MyApp {
-  companion object {
-    @JvmStatic
-    fun main(args: Array<String>) {
-      val schema = toSchema(queries = listOf(TopLevelObject(Query())),
-          config = SchemaGeneratorConfig(listOf("app")))
-
-      val graphql = GraphQL.newGraphQL(schema).build()
-
-      val result = graphql.execute("""{ foo(bar: "baz") { name, age } }""").toSpecification()
-
-      println(result)
-    }
-  }
+fun eval(expr: Expr): Double = when(expr) {
+    is Const -> expr.number
+    is Sum -> eval(expr.e1) + eval(expr.e2)
+    NotANumber -> Double.NaN
 }
