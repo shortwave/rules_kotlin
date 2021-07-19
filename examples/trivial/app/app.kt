@@ -4,6 +4,7 @@ import lib.Expr
 import lib.Const
 import lib.Sum
 import lib.NotANumber
+import lib.Multiply
 
 import kotlin.system.exitProcess
 
