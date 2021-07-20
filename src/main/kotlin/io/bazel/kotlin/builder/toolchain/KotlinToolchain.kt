@@ -168,9 +168,9 @@ class KotlinToolchain private constructor(
     private val compilerClass = toolchain.classLoader.loadClass(clazz)
 
     init {
-      // Disables disposing of the environment which is required when running parallel builds. This
-      // follows the behavior of the Kotlin compiler daemon.
-      System.setProperty("kotlin.environment.keepalive", "true")
+      // NOTE(rockwood): This has some not-friendly bazel caching behavior. We don't use multiplex
+      // workers, so it's probably fine.
+      // System.setProperty("kotlin.environment.keepalive", "true")
 
       val exitCodeClass =
         toolchain.classLoader.loadClass("org.jetbrains.kotlin.cli.common.ExitCode")
